@@ -12,6 +12,7 @@
 		8D494E702F2A71D50004C680 /* Title.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D494E6F2F2A71D50004C680 /* Title.swift */; };
 		8D494E722F2AC35B0004C680 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D494E712F2AC35B0004C680 /* Extensions.swift */; };
 		8D53216A2F2D0EE800E9ACE4 /* TitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5321692F2D0EE800E9ACE4 /* TitleTableViewCell.swift */; };
+		8D53216C2F2D172400E9ACE4 /* TitleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D53216B2F2D172400E9ACE4 /* TitleViewModel.swift */; };
 		8D75753B2F2421DF00532147 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D75753A2F2421DF00532147 /* AppDelegate.swift */; };
 		8D75753D2F2421DF00532147 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D75753C2F2421DF00532147 /* SceneDelegate.swift */; };
 		8D75753F2F2421DF00532147 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D75753E2F2421DF00532147 /* MainTabBarViewController.swift */; };
@@ -31,6 +32,7 @@
 		8D494E6F2F2A71D50004C680 /* Title.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Title.swift; sourceTree = "<group>"; };
 		8D494E712F2AC35B0004C680 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8D5321692F2D0EE800E9ACE4 /* TitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTableViewCell.swift; sourceTree = "<group>"; };
+		8D53216B2F2D172400E9ACE4 /* TitleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleViewModel.swift; sourceTree = "<group>"; };
 		8D7575372F2421DF00532147 /* Netflix Clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Netflix Clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D75753A2F2421DF00532147 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8D75753C2F2421DF00532147 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		8DA35B642F27D0F1006A7383 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				8D53216B2F2D172400E9ACE4 /* TitleViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -237,6 +240,7 @@
 				8D75753D2F2421DF00532147 /* SceneDelegate.swift in Sources */,
 				8D494E702F2A71D50004C680 /* Title.swift in Sources */,
 				8D7575502F24281900532147 /* HomeViewController.swift in Sources */,
+				8D53216C2F2D172400E9ACE4 /* TitleViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
