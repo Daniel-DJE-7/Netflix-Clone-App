@@ -113,9 +113,24 @@ class APICaller {
     task.resume()
   }
   
+  func getDiscoverMovies(completion: @escaping (Result<[Title], Error>) -> Void) {
+    guard let url = URL(string: "\(Constants.baseURL)/3/discover/movie?api_key=\(Constants.API_KEY)&language=es-ES&sort_by=popularity.desc&page=1") else { return }
+    let task = URLSession.shared.dataTask(with: url) { data, _, error in
+      guard let data = data, error == nil else {
+        return
+      }
+      do {
+        let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+        completion(.success(results.results))
+      } catch {
+        completion(.failure(APIError.failedTogetData))
+      }
+    }
+    task.resume()
+  }
   
   
 }
 
-//https://api.themoviedb.org/3/movie/top_rated?api_key=<<api_key>>&language=en-US&page=1
+
 
