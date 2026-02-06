@@ -7,5 +7,6 @@ target 'Netflix Clone' do
 
   # Pods for Netflix Clone
   pod 'SDWebImage'
+  pod 'youtube-ios-player-helper'
 
 end

@@ -10,8 +10,16 @@ import UIKit
 struct Constants {
   static let API_KEY = "f06be6bcababc93f2529c7384395a3cc"
   static let baseURL = "https://api.themoviedb.org"
-  // https://api.themoviedb.org/3/trending/all/{time_window}
-  //https://api.themoviedb.org/3/trending/all/day?api_key=<<api_key>>
+  static let youtubeAPI_key = "AIzaSyADsoQYnG_nRw-XaTkW0jWnMLqYLnHqCXQ"
+  static let youtubeBaseURL = "https://www.googleapis.com/youtube/v3/search?part=snippet&"
+
+  //======================
+  //https://www.googleapis.com/youtube/v3/search?part=snippet&q=&type=video&key=TU_API_KEY
+  //https://www.googleapis.com/youtube/v3/search?part=snippet&q=avengers&type=video&key=TU_API_KEY
+  //https://www.googleapis.com/youtube/v3/search?part=snippet&q=liverpool&type=video&key=TU_API_KEY
+
+
+
 }
 
 enum APIError: Error {
@@ -129,6 +137,48 @@ class APICaller {
     task.resume()
   }
   
+  //
+  func search (with query: String, completion: @escaping (Result<[Title], Error>) -> Void) {
+    
+    guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) else { return }
+    guard let url = URL(string: "\(Constants.baseURL)/3/search/movie?api_key=\(Constants.API_KEY)&query=\(query)") else {
+      return }
+    let task = URLSession.shared.dataTask(with: url) { data, _, error in
+      guard let data = data, error == nil else {
+        return
+      }
+      do {
+        let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+        print(results)
+        completion(.success(results.results))
+      } catch {
+        completion(.failure(APIError.failedTogetData))
+      }
+    }
+    task.resume()
+  }
+  
+  
+  func getMovie(with query: String, completion: @escaping (Result<VideoElement, Error>) -> Void) {
+    guard let query = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
+    guard let url = URL(string: "\(Constants.youtubeBaseURL)q=\(query)&type=video&key=\(Constants.youtubeAPI_key)") else {
+      return
+    }
+    let task = URLSession.shared.dataTask(with: url) { data, _, error in
+      guard let data = data, error == nil else {
+        return
+      }
+      do {
+//        let results = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+        let results = try JSONDecoder().decode(YoutubeSearchResponse.self, from: data)
+        completion(.success(results.items[0]))//accede al primer resultado del search el màs relevante
+      } catch {
+        completion(.failure(error))
+        print(error.localizedDescription)
+      }
+    }
+    task.resume()
+  }
   
 }
 

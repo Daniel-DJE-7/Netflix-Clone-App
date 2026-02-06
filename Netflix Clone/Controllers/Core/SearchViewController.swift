@@ -17,19 +17,34 @@ class SearchViewController: UIViewController {
     return table
   }()
   
+  
+  private let searchController: UISearchController = {
+    let controller = UISearchController(searchResultsController: SearchResultsViewController())
+    controller.searchBar.placeholder = "Search for Movie or a TV show"
+    controller.searchBar.searchBarStyle = .minimal
+    return controller
+  }()
+  
     override func viewDidLoad() {
         super.viewDidLoad()
 
       view.backgroundColor = .systemBackground
-      title = "Top Search"
-      
+      title = "Search"
       navigationController?.navigationBar.prefersLargeTitles = true
       navigationController?.navigationItem.largeTitleDisplayMode = .always
+      
       view.addSubview(discoverTable)
+      
       discoverTable.delegate = self
       discoverTable.dataSource = self
       
+      //adding the search bar to the view
+      navigationItem.searchController = searchController
+      navigationController?.navigationBar.tintColor = .white
+      
       fetchDiscoverMovies()
+      
+      searchController.searchResultsUpdater = self
     }
   
   
@@ -72,6 +87,34 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return 140
   }
+}
+
+extension SearchViewController: UISearchResultsUpdating {
   
-  
+  //=======
+  func updateSearchResults(for searchController: UISearchController) {
+    //obtenemos el texto de la barra de busqueda que el usario ingreso
+    let searchBar = searchController.searchBar
+    //nos aseguramos de que haya texto
+    guard let query = searchBar.text,
+          //quita los espacios de los extremos y verifica que el campo no este vacio, porque evita las busquedas sin ningun texto introducido
+          !query.trimmingCharacters(in: .whitespaces).isEmpty,
+          //se asegura que en el campo de texto se hayan introducido por lo menos 3 caracteres,de lo contrario no busca
+            query.trimmingCharacters(in: .whitespaces).count >= 3,
+          let resultsController = searchController.searchResultsController as? SearchResultsViewController else {
+              return
+    }
+    
+    APICaller.shared.search(with: query) { result in
+      DispatchQueue.main.async {
+        switch result {
+          case .success(let titles):
+            resultsController.titles = titles
+            resultsController.searchResultsCollectionView.reloadData()
+          case .failure(let error):
+            print(error.localizedDescription)
+        }
+      }
+    }
+  }
 }
