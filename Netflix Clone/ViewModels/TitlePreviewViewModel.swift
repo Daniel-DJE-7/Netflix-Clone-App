@@ -7,6 +7,7 @@
 
 import UIKit
 
+//viewModel del trailer de la API de youtube
 struct TitlePreviewViewModel {
   let title: String
   let youtubeView: VideoElement

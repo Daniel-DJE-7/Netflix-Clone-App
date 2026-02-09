@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol SearchResultsViewControllerDelegate: AnyObject {
+  func searchResultsViewControllerDipTapItem(_ viewModel: TitlePreviewViewModel)
+}
+
 class SearchResultsViewController: UIViewController {
 
   public var titles:[Title] = []
+  
+  public weak var delegate: SearchResultsViewControllerDelegate?
   
   public let searchResultsCollectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
@@ -48,9 +54,30 @@ extension SearchResultsViewController: UICollectionViewDelegate, UICollectionVie
       return UICollectionViewCell()
     }
     
-//    cell.backgroundColor = .systemGreen --> para ver el con cuadros que la UICollectionView esté funcionando
+    //    cell.backgroundColor = .systemGreen --> para ver el con cuadros que la UICollectionView esté funcionando
     let title = titles[indexPath.row]
     cell.configure(with: title.poster_path ?? "")
     return cell
+  }
+  
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    collectionView.deselectItem(at: indexPath, animated: true)
+    
+    let title = titles[indexPath.row]
+    let titleName = title.original_title ?? ""
+    
+    APICaller.shared.getMovie(with:titleName) { [weak self] result in
+      switch result {
+      case .success(let videoElement):
+        self?.delegate?.searchResultsViewControllerDipTapItem(TitlePreviewViewModel(title: title.original_title ?? "",
+                                                                                    youtubeView: videoElement,
+                                                                                    titleOverview: title.overview ?? ""))
+        
+      case .failure(let error):
+        print(error.localizedDescription)
+      }
+      
+
+    }
   }
 }

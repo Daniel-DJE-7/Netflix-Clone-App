@@ -41,6 +41,7 @@ class TitlePreviewViewController: UIViewController {
   private let webView: WKWebView = {
       let config = WKWebViewConfiguration()
       config.allowsInlineMediaPlayback = true
+    config.mediaTypesRequiringUserActionForPlayback = []
       let webView = WKWebView(frame: .zero, configuration: config)
       webView.translatesAutoresizingMaskIntoConstraints = false
       return webView
@@ -91,9 +92,9 @@ class TitlePreviewViewController: UIViewController {
     overviewLabel.text = model.titleOverview
     
     let videoID = model.youtubeView.id.videoId//--> aqui está el error
-    guard let url = URL(string: "https://www.youtube.com/embed/?playsinline=1")
+    guard let url = URL(string: "https://www.youtube.com/embed/\(videoID)?playsinline=1")
     else {
-      print("invalid url")
+      print("videoID is nil")
       return
     }
     print(url)

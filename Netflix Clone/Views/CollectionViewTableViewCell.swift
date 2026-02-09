@@ -19,6 +19,7 @@ class CollectionViewTableViewCell: UITableViewCell {
   
   private var titles: [Title] = []
   
+  //esta es la collectionView de los posters de topTrending, popular, etc.
   private let collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.itemSize = CGSize(width: 140, height: 200)
@@ -82,23 +83,44 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     collectionView.deselectItem(at: indexPath, animated: true)
     
+    //obtiene la pelicula correcta
     let title = titles[indexPath.row]
+    //obtiene el nombre de la movie
     guard let titleName = title.original_title ?? title.original_name else {
       return
     }
-    
+    //pedimos el trailer a la API, se busca el trailer en youtube
     APICaller.shared.getMovie(with: titleName + " trailer") { [weak self] result in
       switch result {
-      case .success(let videoElement):
-        //revisar este codigo
+      case .success(let videoElement)://-->si la api funciona bien, se obtiene el trailer correcto
+        
+        //se obtiene la descripción de la movie, se saca un resumen.
         let title = self?.titles[indexPath.row]
         guard let titleOverview = title?.overview else {
           return
         }
+        //se asegura de que self (celda de la UICollectionView) exista, para evitar que crashee si la vista ya no existe. si la celda
         guard let strongSelf = self else {
           return
         }
+        //se crea un viewModel, empaquetando toda la info necesaria para la siguiente pantalla
         let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
+        //=====================================================================================================
+        
+        /*
+         se avisa al delegado lo siguiente:
+         👉 Básicamente dice:
+
+         “Oye, tocaron esta película, aquí están sus datos, abre la pantalla de detalle”
+
+         El delegado (normalmente un ViewController) se encarga de:
+
+         + Navegar
+
+         + Mostrar el preview
+
+         + Reproducir el trailer
+         */
         self?.delegate?.CollectionViewTableViewCellDipTapCell(strongSelf, viewModel: viewModel)
         
       case .failure(let error):

@@ -94,10 +94,15 @@ class HeroHeaderUIView: UIView {
       downloadButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
       downloadButton.widthAnchor.constraint(equalToConstant: 120)
     ])
-
   }
   
-  
+  //configurar aleatoriamente el poster del heroHeaderView
+  public func configure(with model: TitleViewModel) {
+    guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterURL)") else {
+      return
+    }
+    heroImageView.sd_setImage(with: url, completed: nil)
+  }
   
   override func layoutSubviews() {
     super.layoutSubviews()
